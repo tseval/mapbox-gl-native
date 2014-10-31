@@ -71,6 +71,8 @@ void HTTPRequest::startHTTPRequest(std::unique_ptr<Response> &&res) {
     assert(uv_thread_self() == thread_id);
     assert(!http_baton);
 
+    fprintf(stderr, "\nHTTPRequestBaton path %s\n", path.c_str());
+
     http_baton = std::make_shared<HTTPRequestBaton>(path);
     http_baton->request = this;
     http_baton->async = new uv_async_t;
