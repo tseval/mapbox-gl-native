@@ -90,21 +90,8 @@ void HeadlessView::createContext() {
 #endif
 
 #if MBGL_USE_GLX
-#ifdef GLX_ARB_create_context
-    if (glXCreateContextAttribsARB == nullptr) {
-        glXCreateContextAttribsARB = (PFNGLXCREATECONTEXTATTRIBSARBPROC)glXGetProcAddressARB((const GLubyte *)"glXCreateContextAttribsARB");
-    }
-#endif
-
     x_display = display_->x_display;
     fb_configs = display_->fb_configs;
-
-#ifdef GLX_ARB_create_context
-    if (glXCreateContextAttribsARB) {
-        // Try to create a core profile context.
-        gl_context = createCoreProfile(x_display, fb_configs[0]);
-    }
-#endif
 
     if (!gl_context) {
         // Try to create a legacy context
@@ -132,7 +119,6 @@ void HeadlessView::createContext() {
     if (glx_pbuffer == 0) {
         throw std::runtime_error("Error creating GL context object");
     }
-    fprintf(stderr, "\nglx_pbuffer created");
 #endif
 }
 
