@@ -129,6 +129,10 @@ void HeadlessView::createContext() {
         None
     };
     glx_pbuffer = glXCreatePbuffer(x_display, fb_configs[0], pbuffer_attributes);
+    if (glx_pbuffer == 0) {
+        throw std::runtime_error("Error creating GL context object");
+    }
+    fprintf(stderr, "\nglx_pbuffer created");
 #endif
 }
 
@@ -251,8 +255,20 @@ void HeadlessView::make_active() {
 #endif
 
 #if MBGL_USE_GLX
+    int err = glGetError();
+    if (err != GL_NO_ERROR)
+    {
+        fprintf(stderr, "\nmake_active: before glXMakeContextCurrent %d", err);
+    }
+
     if (!glXMakeContextCurrent(x_display, glx_pbuffer, glx_pbuffer, gl_context)) {
         throw std::runtime_error("Switching OpenGL context failed\n");
+    }
+
+    int err2 = glGetError();
+    if (err2 != GL_NO_ERROR)
+    {
+        fprintf(stderr, "\nmake_active: after glXMakeContextCurrent %d", err2);
     }
 #endif
 }
