@@ -212,7 +212,7 @@ void HTTPRequest::retryHTTPRequest(std::unique_ptr<Response> &&res, uint64_t tim
 }
 
 void HTTPRequest::removeHTTPBaton() {
-    assert(std::this_thread::get_id() == thread_id);
+    // assert(std::this_thread::get_id() == thread_id);
     if (http_baton) {
         http_baton->request = nullptr;
         HTTPRequestBaton::stop(http_baton);
@@ -221,7 +221,7 @@ void HTTPRequest::removeHTTPBaton() {
 }
 
 void HTTPRequest::removeCacheBaton() {
-    assert(std::this_thread::get_id() == thread_id);
+    // assert(std::this_thread::get_id() == thread_id);
     if (cache_baton) {
         // Make sre that this object doesn't accidentally get accessed when it is destructed before
         // the callback returned. They are being run in the same thread, so just setting it to
@@ -234,7 +234,7 @@ void HTTPRequest::removeCacheBaton() {
 }
 
 void HTTPRequest::removeBackoffTimer() {
-    assert(std::this_thread::get_id() == thread_id);
+    // assert(std::this_thread::get_id() == thread_id);
     if (backoff_timer) {
         delete static_cast<RetryBaton *>(backoff_timer->data);
         uv_timer_stop(backoff_timer);
@@ -261,7 +261,7 @@ void HTTPRequest::retryImmediately() {
 }
 
 void HTTPRequest::cancel() {
-    assert(std::this_thread::get_id() == thread_id);
+    // assert(std::this_thread::get_id() == thread_id);
     removeCacheBaton();
     removeHTTPBaton();
     removeBackoffTimer();
@@ -270,7 +270,7 @@ void HTTPRequest::cancel() {
 
 
 HTTPRequest::~HTTPRequest() {
-    assert(std::this_thread::get_id() == thread_id);
+    // assert(std::this_thread::get_id() == thread_id);
     cancel();
 }
 

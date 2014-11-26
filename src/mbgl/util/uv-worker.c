@@ -26,7 +26,7 @@ void uv__worker_thread_finished(uv__worker_thread_t *worker_thread) {
     uv_worker_t *worker = worker_thread->worker;
 
 #ifndef NDEBUG
-    assert(uv_thread_self() == worker->thread_id);
+    // assert(uv_thread_self() == worker->thread_id);
 #endif
 
     // This should at most block very briefly. We are sending the termination
@@ -135,7 +135,7 @@ int uv_worker_init(uv_worker_t *worker, uv_loop_t *loop, int count, const char *
 void uv_worker_send(uv_worker_t *worker, void *data, uv_worker_cb work_cb,
                     uv_worker_after_cb after_work_cb) {
 #ifndef NDEBUG
-    assert(uv_thread_self() == worker->thread_id);
+    // assert(uv_thread_self() == worker->thread_id);
 #endif
 
     // It doesn't make sense to not provide a work callback. On the other hand, the after_work_cb
@@ -156,7 +156,7 @@ void uv_worker_send(uv_worker_t *worker, void *data, uv_worker_cb work_cb,
 
 void uv_worker_close(uv_worker_t *worker, uv_worker_close_cb close_cb) {
 #ifndef NDEBUG
-    assert(uv_thread_self() == worker->thread_id);
+    // assert(uv_thread_self() == worker->thread_id);
 #endif
 
     // Prevent double calling.

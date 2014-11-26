@@ -333,4 +333,3 @@ void HeadlessView::make_inactive() {
 void HeadlessView::swap() {}
 
 }
-
