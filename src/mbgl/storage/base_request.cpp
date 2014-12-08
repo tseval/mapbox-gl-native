@@ -25,7 +25,7 @@ BaseRequest::BaseRequest(const std::string &path_) : threadId(std::this_thread::
 // A base request can only be "canceled" by destroying the object. In that case, we'll have to
 // notify all cancel callbacks.
 BaseRequest::~BaseRequest() {
-    assert(std::this_thread::get_id() == threadId);
+    // assert(std::this_thread::get_id() == threadId);
     notify();
 }
 
@@ -34,7 +34,7 @@ void BaseRequest::retryImmediately() {
 }
 
 void BaseRequest::notify() {
-    assert(std::this_thread::get_id() == threadId);
+    // assert(std::this_thread::get_id() == threadId);
 
     // The parameter exists solely so that any calls to ->remove()
     // are not going to cause deallocation of this object while this call is in progress.

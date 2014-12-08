@@ -275,7 +275,7 @@ void Map::run() {
         mapThread = mainThread;
     }
 #endif
-    assert(std::this_thread::get_id() == mapThread);
+    // assert(std::this_thread::get_id() == mapThread);
 
     if (async) {
         checkForPause();
@@ -363,7 +363,7 @@ void Map::terminate() {
 #pragma mark - Setup
 
 void Map::setup() {
-    assert(std::this_thread::get_id() == mapThread);
+    // assert(std::this_thread::get_id() == mapThread);
     assert(painter);
     view.make_active();
     painter->setup();
@@ -626,7 +626,7 @@ uint64_t Map::getDefaultTransitionDuration() {
 }
 
 void Map::updateSources() {
-    assert(std::this_thread::get_id() == mapThread);
+    // assert(std::this_thread::get_id() == mapThread);
 
     // First, disable all existing sources.
     for (const auto& source : activeSources) {

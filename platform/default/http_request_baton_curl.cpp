@@ -4,6 +4,7 @@
 #include <mbgl/util/time.hpp>
 #include <mbgl/util/string.hpp>
 #include <mbgl/util/std.hpp>
+#include <mbgl/util/constants.hpp>
 
 #ifdef __ANDROID__
     #include <mbgl/android/jni.hpp>
