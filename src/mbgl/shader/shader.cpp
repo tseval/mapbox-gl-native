@@ -11,6 +11,38 @@
 
 using namespace mbgl;
 
+#define GL_PROGRAM_BINARY_RETRIEVABLE_HINT 0x8257
+#define GL_PROGRAM_BINARY_LENGTH           0x8741
+#define GL_NUM_PROGRAM_BINARY_FORMATS      0x87FE
+#define GL_PROGRAM_BINARY_FORMATS          0x87FF
+
+static gl::ExtensionFunction<
+    void (GLuint program,
+          GLsizei bufSize,
+          GLsizei *length,
+          GLenum *binaryFormat,
+          void *binary)>
+    GetProgramBinary({
+        {"GL_ARB_get_program_binary", "glGetProgramBinary"}
+    });
+
+static gl::ExtensionFunction<
+    void (GLuint program,
+          GLenum binaryFormat,
+          const void *binary,
+          GLsizei length)>
+    ProgramBinary({
+        {"GL_ARB_get_program_binary", "glProgramBinary"}
+    });
+
+static gl::ExtensionFunction<
+    void (GLuint program,
+          GLenum pname,
+          GLint value)>
+    ProgramParameteri({
+        {"GL_ARB_get_program_binary", "glProgramParameteri"}
+    });
+
 Shader::Shader(const char *name_, const GLchar *vertSource, const GLchar *fragSource)
     : name(name_),
       valid(false),
@@ -23,9 +55,12 @@ Shader::Shader(const char *name_, const GLchar *vertSource, const GLchar *fragSo
         binaryFileName = mbgl::platform::defaultShaderCache() + name + ".bin";
     }
 
+    GLint numBinaryFormats;
+    MBGL_CHECK_ERROR(glGetIntegerv(GL_NUM_PROGRAM_BINARY_FORMATS, &numBinaryFormats));
+
     // Load binary shader if it exists
     bool skipCompile = false;
-    if (!binaryFileName.empty() && (gl::ProgramBinary != nullptr)) {
+    if (numBinaryFormats > 0 && !binaryFileName.empty() && ProgramBinary) {
         std::ifstream binaryFile(binaryFileName, std::ios::in | std::ios::binary);
 
         GLsizei binaryLength;
@@ -36,7 +71,7 @@ Shader::Shader(const char *name_, const GLchar *vertSource, const GLchar *fragSo
         std::unique_ptr<char[]> binary = mbgl::util::make_unique<char[]>(binaryLength);
         binaryFile.read(binary.get(), binaryLength);
 
-        MBGL_CHECK_ERROR(gl::ProgramBinary(program, binaryFormat, binary.get(), binaryLength));
+        MBGL_CHECK_ERROR(ProgramBinary(program, binaryFormat, binary.get(), binaryLength));
 
         // Check if the binary was valid
         GLint status;
@@ -72,8 +107,8 @@ Shader::Shader(const char *name_, const GLchar *vertSource, const GLchar *fragSo
         MBGL_CHECK_ERROR(glAttachShader(program, fragShader));
 
         {
-            if (!binaryFileName.empty() && (gl::ProgramParameteri != nullptr)) {
-                MBGL_CHECK_ERROR(gl::ProgramParameteri(program, GL_PROGRAM_BINARY_RETRIEVABLE_HINT, GL_TRUE));
+            if (!binaryFileName.empty() && ProgramParameteri) {
+                MBGL_CHECK_ERROR(ProgramParameteri(program, GL_PROGRAM_BINARY_RETRIEVABLE_HINT, GL_TRUE));
             }
 
             // Link program
@@ -174,14 +209,14 @@ bool Shader::compileShader(GLuint *shader, GLenum type, const GLchar *source) {
 }
 
 Shader::~Shader() {
-    if (!binaryFileName.empty() && (gl::GetProgramBinary != nullptr)) {
+    if (!binaryFileName.empty() && GetProgramBinary) {
         // Retrieve the program binary
         GLsizei binaryLength;
         GLenum binaryFormat;
         MBGL_CHECK_ERROR(glGetProgramiv(program, GL_PROGRAM_BINARY_LENGTH, &binaryLength));
         if (binaryLength > 0) {
             std::unique_ptr<char[]> binary = mbgl::util::make_unique<char[]>(binaryLength);
-            MBGL_CHECK_ERROR(gl::GetProgramBinary(program, binaryLength, NULL, &binaryFormat, binary.get()));
+            MBGL_CHECK_ERROR(GetProgramBinary(program, binaryLength, NULL, &binaryFormat, binary.get()));
 
             // Write the binary to a file
             std::ofstream binaryFile(binaryFileName, std::ios::out | std::ios::trunc | std::ios::binary);

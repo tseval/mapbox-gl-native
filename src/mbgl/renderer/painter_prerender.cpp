@@ -9,11 +9,12 @@ void Painter::preparePrerender(RasterBucket &bucket) {
     MBGL_CHECK_ERROR(glDisable(GL_DEPTH_TEST));
     MBGL_CHECK_ERROR(glDisable(GL_STENCIL_TEST));
 
-// Render the actual tile.
-#if GL_EXT_discard_framebuffer
-    const GLenum discards[] = {GL_COLOR_ATTACHMENT0};
-    MBGL_CHECK_ERROR(glDiscardFramebufferEXT(GL_FRAMEBUFFER, 1, discards));
-#endif
+    // Render the actual tile.
+    if (gl::DiscardFramebufferEXT) {
+        const GLenum discards[] = {GL_COLOR_ATTACHMENT0};
+        MBGL_CHECK_ERROR(gl::DiscardFramebufferEXT(GL_FRAMEBUFFER, 1, discards));
+    }
+
     MBGL_CHECK_ERROR(glClearColor(0.0, 0.0, 0.0, 0.0));
     MBGL_CHECK_ERROR(glClear(GL_COLOR_BUFFER_BIT));
 

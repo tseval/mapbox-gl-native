@@ -122,12 +122,15 @@ void PrerenderedTexture::blur(Painter& painter, uint16_t passes) {
     MBGL_CHECK_ERROR(glActiveTexture(GL_TEXTURE0));
 
     for (int i = 0; i < passes; i++) {
+        const GLenum discards[] = { GL_COLOR_ATTACHMENT0 };
+
         // Render horizontal
         MBGL_CHECK_ERROR(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, secondary_texture, 0));
-#if GL_EXT_discard_framebuffer
-        const GLenum discards[] = { GL_COLOR_ATTACHMENT0 };
-        MBGL_CHECK_ERROR(glDiscardFramebufferEXT(GL_FRAMEBUFFER, 1, discards));
-#endif
+
+        if (gl::DiscardFramebufferEXT) {
+            MBGL_CHECK_ERROR(gl::DiscardFramebufferEXT(GL_FRAMEBUFFER, 1, discards));
+        }
+
         MBGL_CHECK_ERROR(glClear(GL_COLOR_BUFFER_BIT));
 
         painter.gaussianShader->u_offset = {{ 1.0f / float(properties.size), 0 }};
@@ -135,13 +138,13 @@ void PrerenderedTexture::blur(Painter& painter, uint16_t passes) {
         painter.coveringGaussianArray.bind(*painter.gaussianShader, painter.tileStencilBuffer, BUFFER_OFFSET(0));
         MBGL_CHECK_ERROR(glDrawArrays(GL_TRIANGLES, 0, (GLsizei)painter.tileStencilBuffer.index()));
 
-
-
         // Render vertical
         MBGL_CHECK_ERROR(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, original_texture, 0));
-#if GL_EXT_discard_framebuffer
-        MBGL_CHECK_ERROR(glDiscardFramebufferEXT(GL_FRAMEBUFFER, 1, discards));
-#endif
+
+        if (gl::DiscardFramebufferEXT) {
+            MBGL_CHECK_ERROR(gl::DiscardFramebufferEXT(GL_FRAMEBUFFER, 1, discards));
+        }
+
         MBGL_CHECK_ERROR(glClear(GL_COLOR_BUFFER_BIT));
 
         painter.gaussianShader->u_offset = {{ 0, 1.0f / float(properties.size) }};

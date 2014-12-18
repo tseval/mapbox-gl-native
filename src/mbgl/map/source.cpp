@@ -15,6 +15,7 @@
 #include <mbgl/geometry/glyph_atlas.hpp>
 #include <mbgl/style/style_layer.hpp>
 #include <mbgl/platform/log.hpp>
+#include <mbgl/gl/debugging.hpp>
 
 #include <mbgl/map/vector_tile_data.hpp>
 #include <mbgl/map/raster_tile_data.hpp>
@@ -88,13 +89,13 @@ size_t Source::getTileCount() const {
 void Source::drawClippingMasks(Painter &painter) {
     for (std::pair<const Tile::ID, std::unique_ptr<Tile>> &pair : tiles) {
         Tile &tile = *pair.second;
-        gl::group group(std::string { "mask: " } + std::string(tile.id));
+        gl::debugging::group group(std::string { "mask: " } + std::string(tile.id));
         painter.drawClippingMask(tile.matrix, tile.clip);
     }
 }
 
 void Source::render(Painter &painter, util::ptr<StyleLayer> layer_desc) {
-    gl::group group(std::string { "layer: " } + layer_desc->id);
+    gl::debugging::group group(std::string { "layer: " } + layer_desc->id);
     for (const std::pair<const Tile::ID, std::unique_ptr<Tile>> &pair : tiles) {
         Tile &tile = *pair.second;
         if (tile.data && tile.data->state == TileData::State::parsed) {

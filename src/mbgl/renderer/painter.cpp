@@ -11,6 +11,7 @@
 #include <mbgl/util/mat3.hpp>
 #include <mbgl/geometry/sprite_atlas.hpp>
 #include <mbgl/map/source.hpp>
+#include <mbgl/gl/debugging.hpp>
 
 #if defined(DEBUG)
 #include <mbgl/util/stopwatch.hpp>
@@ -42,18 +43,7 @@ void Painter::setup() {
     util::stopwatch stopwatch("painter setup");
 #endif
 
-    // Enable GL debugging
-    if ((gl::DebugMessageControl != nullptr) && (gl::DebugMessageCallback != nullptr)) {
-        // This will enable all messages including performance hints
-        //MBGL_CHECK_ERROR(gl::DebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, nullptr, GL_TRUE));
-
-        // This will only enable high and medium severity messages
-        MBGL_CHECK_ERROR(gl::DebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DEBUG_SEVERITY_HIGH, 0, nullptr, GL_TRUE));
-        MBGL_CHECK_ERROR(gl::DebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DEBUG_SEVERITY_MEDIUM, 0, nullptr, GL_TRUE));
-        MBGL_CHECK_ERROR(gl::DebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DEBUG_SEVERITY_NOTIFICATION, 0, nullptr, GL_FALSE));
-
-        MBGL_CHECK_ERROR(gl::DebugMessageCallback(gl::debug_callback, nullptr));
-    }
+    gl::debugging::enable();
 
     setupShaders();
 
@@ -179,7 +169,7 @@ void Painter::changeMatrix() {
 }
 
 void Painter::clear() {
-    gl::group group("clear");
+    gl::debugging::group group("clear");
     MBGL_CHECK_ERROR(glStencilMask(0xFF));
     depthMask(true);
 
@@ -366,7 +356,7 @@ void Painter::renderLayer(util::ptr<StyleLayer> layer_desc, const Tile::ID* id, 
 void Painter::renderTileLayer(const Tile& tile, util::ptr<StyleLayer> layer_desc, const mat4 &matrix) {
     assert(tile.data);
     if (tile.data->hasData(*layer_desc) || layer_desc->type == StyleLayerType::Raster) {
-        gl::group group(std::string { "render " } + tile.data->name);
+        gl::debugging::group group(std::string { "render " } + tile.data->name);
         prepareTile(tile);
         tile.data->render(*this, layer_desc, matrix);
     }

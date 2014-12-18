@@ -3,11 +3,12 @@
 #include <mbgl/map/map.hpp>
 #include <mbgl/map/source.hpp>
 #include <mbgl/util/clip_ids.hpp>
+#include <mbgl/gl/debugging.hpp>
 
 using namespace mbgl;
 
 void Painter::drawClippingMasks(const std::set<util::ptr<StyleSource>> &sources) {
-    gl::group group("clipping masks");
+    gl::debugging::group group("clipping masks");
 
     useProgram(plainShader->program);
     MBGL_CHECK_ERROR(glDisable(GL_DEPTH_TEST));

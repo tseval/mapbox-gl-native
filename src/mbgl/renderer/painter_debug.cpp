@@ -2,11 +2,12 @@
 #include <mbgl/renderer/debug_bucket.hpp>
 #include <mbgl/map/map.hpp>
 #include <mbgl/util/string.hpp>
+#include <mbgl/gl/debugging.hpp>
 
 using namespace mbgl;
 
 void Painter::renderTileDebug(const Tile& tile) {
-    gl::group group(std::string { "debug " } + std::string(tile.id));
+    gl::debugging::group group(std::string { "debug " } + std::string(tile.id));
     assert(tile.data);
     if (debug) {
         prepareTile(tile);
@@ -16,7 +17,7 @@ void Painter::renderTileDebug(const Tile& tile) {
 }
 
 void Painter::renderDebugText(DebugBucket& bucket, const mat4 &matrix) {
-    gl::group group("debug text");
+    gl::debugging::group group("debug text");
 
     MBGL_CHECK_ERROR(glDisable(GL_DEPTH_TEST));
 
@@ -43,7 +44,7 @@ void Painter::renderDebugText(DebugBucket& bucket, const mat4 &matrix) {
 }
 
 void Painter::renderDebugFrame(const mat4 &matrix) {
-    gl::group group("debug frame");
+    gl::debugging::group group("debug frame");
 
     // Disable depth test and don't count this towards the depth buffer,
     // but *don't* disable stencil test, as we want to clip the red tile border
@@ -67,7 +68,7 @@ void Painter::renderDebugText(const std::vector<std::string> &strings) {
         return;
     }
 
-    gl::group group("debug text");
+    gl::debugging::group group("debug text");
 
     MBGL_CHECK_ERROR(glDisable(GL_DEPTH_TEST));
     MBGL_CHECK_ERROR(glStencilFunc(GL_ALWAYS, 0xFF, 0xFF));
