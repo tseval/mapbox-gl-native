@@ -12,23 +12,28 @@
         '../platform/default/settings_json.cpp',
         '../platform/default/glfw_view.cpp',
         '../platform/default/log_stderr.cpp',
+        '../platform/default/http_request_baton_curl.cpp',
       ],
       'xcode_settings': {
         'OTHER_CPLUSPLUSFLAGS':[
           '<@(glfw3_cflags)',
           '<@(png_cflags)',
           '<@(jpeg_cflags)',
+          '<@(uv_cflags)',
         ],
       },
       'cflags_cc': [
         '<@(glfw3_cflags)',
         '<@(png_cflags)',
         '<@(jpeg_cflags)',
+        '<@(uv_cflags)',
         '-I<(boost_root)/include',
       ],
       'variables': {
         'ldflags': [
           '<@(png_ldflags)',
+          '<@(uv_static_libs)',
+          '<@(uv_ldflags)',
           '<@(sqlite3_static_libs)',
           '<@(sqlite3_ldflags)',
           '<@(glfw3_static_libs)',

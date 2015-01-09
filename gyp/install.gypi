@@ -49,7 +49,6 @@
                     '<(platform)',
                     '<@(sqlite3_static_libs)',
                     '<@(sqlite3_ldflags)',
-                    '<@(curl_ldflags)',
                     '<@(png_ldflags)',
                     '<@(other_ldflags)'
                 ]
