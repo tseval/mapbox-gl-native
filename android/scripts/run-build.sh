@@ -33,10 +33,9 @@ user_data="#!/bin/bash
     export MAPBOX_ACCESS_TOKEN=$MAPBOX_ACCESS_TOKEN
     export TESTMUNK_KEY=$TESTMUNK_KEY
     export TESTMUNK=$TESTMUNK
-    export MASON_ANDROID_ABI=$MASON_ANDROID_ABI
-    export ANDROID_ABI=$MASON_ANDROID_ABI
+    export BUILDTYPE=$BUILDTYPE
 
-    if ./android/scripts/build-$CONFIG.sh $NAME &>../build.log; then
+    if ./android/scripts/build.sh $NAME &>../build.log; then
         echo 'ANDROID BUILD PASSED'
     else
         echo 'ANDROID BUILD FAILED'
