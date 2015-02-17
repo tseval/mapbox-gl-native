@@ -10,6 +10,7 @@
       'mac_bundle': 1,
       'mac_bundle_resources': [
         '<!@(find ./img -type f)',
+        'features.json'
       ],
 
       'dependencies': [
@@ -29,6 +30,10 @@
         './MBXViewController.mm',
         '../../platform/darwin/settings_nsuserdefaults.mm',
       ],
+
+      'link_settings': {
+        'libraries': [ 'QuartzCore.framework' ]
+      },
 
       'xcode_settings': {
         'SDKROOT': 'iphoneos',

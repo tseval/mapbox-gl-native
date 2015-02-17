@@ -5,6 +5,7 @@
 #import <mbgl/platform/darwin/settings_nsuserdefaults.hpp>
 
 #import <CoreLocation/CoreLocation.h>
+#import <QuartzCore/QuartzCore.h>
 
 static UIColor *const kTintColor = [UIColor colorWithRed:0.120 green:0.550 blue:0.670 alpha:1.000];
 
@@ -19,6 +20,10 @@ static NSDictionary *const kStyles = @{
 
 @property (nonatomic) MGLMapView *mapView;
 @property (nonatomic) CLLocationManager *locationManager;
+@property (nonatomic) NSMutableArray *features;
+@property (nonatomic) UIImage *pin;
+@property (nonatomic) CLLocationCoordinate2D lastCenter;
+@property (nonatomic) CGFloat lastZoom;
 
 @end
 
@@ -87,10 +92,66 @@ mbgl::Settings_NSUserDefaults *settings = nullptr;
 
     settings = new mbgl::Settings_NSUserDefaults();
     [self restoreState:nil];
+
+    [self.mapView setCenterCoordinate:CLLocationCoordinate2DMake(37.776, -122.412) zoomLevel:14.5 animated:NO];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+
+    self.features = [NSMutableArray array];
+
+    id geojson = [NSJSONSerialization JSONObjectWithData:
+                  [NSData dataWithContentsOfFile:
+                   [[NSBundle mainBundle] pathForResource:@"features" ofType:@"json"]]
+                                                 options:NSJSONReadingMutableContainers
+                                                   error:nil];
+
+    if (geojson && [geojson isKindOfClass:[NSDictionary class]]) {
+        self.pin = [UIImage imageNamed:@"pin.png"];
+        for (NSMutableDictionary *feature in geojson[@"features"]) {
+            CLLocationCoordinate2D c = CLLocationCoordinate2DMake([feature[@"geometry"][@"coordinates"][1] doubleValue],
+                                                                  [feature[@"geometry"][@"coordinates"][0] doubleValue]);
+            CGPoint p = [self.mapView convertCoordinate:c toPointToView:self.mapView];
+            UIImageView *pinView = [[UIImageView alloc] initWithImage:self.pin];
+            pinView.center = p;
+            [self.view addSubview:pinView];
+
+            feature[@"view"] = pinView;
+
+            [self.features addObject:feature];
+        }
+    }
+
+    self.lastCenter = self.mapView.centerCoordinate;
+    self.lastZoom = self.mapView.zoomLevel;
+
+    CADisplayLink *link = [CADisplayLink displayLinkWithTarget:self selector:@selector(refresh:)];
+    [link addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
 }
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wunused-parameter"
+
+- (void)refresh:(CADisplayLink *)link
+{
+    if (self.mapView.centerCoordinate.latitude != self.lastCenter.latitude   ||
+        self.mapView.centerCoordinate.longitude != self.lastCenter.longitude ||
+        self.mapView.zoomLevel != self.lastZoom) {
+        for (NSDictionary *feature in self.features) {
+            CLLocationCoordinate2D c = CLLocationCoordinate2DMake([feature[@"geometry"][@"coordinates"][1] doubleValue],
+                                                                  [feature[@"geometry"][@"coordinates"][0] doubleValue]);
+            CGPoint p = [self.mapView convertCoordinate:c toPointToView:self.mapView];
+            if (CGRectContainsPoint(self.mapView.bounds, p)) {
+                ((UIView *)feature[@"view"]).center = p;
+            }
+        }
+
+        self.lastCenter = self.mapView.centerCoordinate;
+        self.lastZoom = self.mapView.zoomLevel;
+    }
+}
 
 - (void)saveState:(NSNotification *)notification
 {
