@@ -103,10 +103,10 @@ mbgl::Settings_NSUserDefaults *settings = nullptr;
     self.features = [NSMutableArray array];
 
     id geojson = [NSJSONSerialization JSONObjectWithData:
-                  [NSData dataWithContentsOfFile:
-                   [[NSBundle mainBundle] pathForResource:@"features" ofType:@"json"]]
-                                                 options:NSJSONReadingMutableContainers
-                                                   error:nil];
+                     [NSData dataWithContentsOfFile:
+                        [[NSBundle mainBundle] pathForResource:@"features" ofType:@"json"]]
+                                            options:NSJSONReadingMutableContainers
+                                              error:nil];
 
     if (geojson && [geojson isKindOfClass:[NSDictionary class]]) {
         self.pin = [UIImage imageNamed:@"pin.png"];
