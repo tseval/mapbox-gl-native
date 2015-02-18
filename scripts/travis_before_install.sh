@@ -24,7 +24,10 @@ if [[ ${TRAVIS_OS_NAME} == "linux" ]]; then
                             libboost1.55-dev libcurl4-openssl-dev \
                             libpng-dev libsqlite3-dev
 
-    if [[ ${MASON_PLATFORM} != "android" ]]; then
+    if [[ ${MASON_PLATFORM} == "android" ]]; then
+        mapbox_time "setup_android" \
+        ./scripts/setup-android-build.sh
+    else
         mapbox_time "install_opengl" \
         sudo apt-get -y install mesa-utils libxi-dev x11proto-randr-dev \
                                 x11proto-xext-dev libxrandr-dev \

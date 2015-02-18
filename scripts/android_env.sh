@@ -3,14 +3,14 @@
 set -e
 set -o pipefail
 
-./scripts/local_mason.sh
+./scripts/local_mason.sh > /dev/null
 
 export MASON_PLATFORM=android
 
 export PATH=`.mason/mason env PATH`
 
 echo MASON_PLATFORM=\"android\"
-echo MASON_ANDROID_ABI=\"${MASON_ANDROID_ABI}\"
+echo MASON_ANDROID_ABI=\"${MASON_ANDROID_ABI:-arm-v7}\"
 
 echo CXX=\"`which $(.mason/mason env CXX)`\"
 echo CC=\"`which $(.mason/mason env CC)`\"
