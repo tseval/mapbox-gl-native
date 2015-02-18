@@ -61,6 +61,8 @@ mbgl::Settings_NSUserDefaults *settings = nullptr;
     self.mapView = [[MGLMapView alloc] initWithFrame:self.view.bounds accessToken:accessToken];
     self.mapView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     [self.view addSubview:self.mapView];
+    
+    [self.mapView setDelegate:self];
 
     self.mapView.viewControllerForLayoutGuides = self;
 
@@ -88,6 +90,19 @@ mbgl::Settings_NSUserDefaults *settings = nullptr;
     settings = new mbgl::Settings_NSUserDefaults();
     [self restoreState:nil];
 }
+
+#pragma mark MGLMapViewDelegate
+
+- (void)mapView:(MGLMapView *)mapView regionWillChangeAnimated:(BOOL)animated
+{
+    NSLog(@"regionWillChangeAnimated with mapView = %@, and animated = %d", mapView, animated);
+}
+
+- (void)mapView:(MGLMapView *)mapView regionDidChangeAnimated:(BOOL)animated
+{
+    NSLog(@"regionDidChangeAnimated with mapView = %@, and animated = %d", mapView, animated);
+}
+
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wunused-parameter"
