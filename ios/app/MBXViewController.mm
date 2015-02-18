@@ -98,6 +98,11 @@ mbgl::Settings_NSUserDefaults *settings = nullptr;
     NSLog(@"regionWillChangeAnimated with mapView = %@, and animated = %d", mapView, animated);
 }
 
+- (void)mapViewRegionIsChanging:(MGLMapView *)mapView
+{
+    NSLog(@"mapViewRegionIsChanging with mapView = %@", mapView);
+}
+
 - (void)mapView:(MGLMapView *)mapView regionDidChangeAnimated:(BOOL)animated
 {
     NSLog(@"regionDidChangeAnimated with mapView = %@, and animated = %d", mapView, animated);
