@@ -11,7 +11,7 @@ if [[ $MASON_PLATFORM == "android" ]]; then
     echo "${MAPBOX_ACCESS_TOKEN}" >> ./android/java/MapboxGLAndroidSDKTestApp/src/main/res/raw/token.txt
 
     mapbox_time "compile_program" \
-    make android -j`nproc` BUILDTYPE=${BUILDTYPE}
+    make android BUILDTYPE=${BUILDTYPE}
 
     aws s3 cp ./build/android-${MASON_ANDROID_ABI}/${BUILDTYPE}/lib.target/libmapbox-gl.so s3://mapbox/mapbox-gl-native/android/build/${NAME}/libmapbox-gl.so
     aws s3 cp ./android/java/MapboxGLAndroidSDKTestApp/build/outputs/apk/MapboxGLAndroidSDKTestApp-debug.apk s3://mapbox/mapbox-gl-native/android/build/${NAME}/MapboxGLAndroidSDKTestApp-debug.apk

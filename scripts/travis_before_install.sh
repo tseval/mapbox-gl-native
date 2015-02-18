@@ -7,27 +7,31 @@ if [[ ${TRAVIS_OS_NAME} == "linux" ]]; then
     #
     # install Linux dependencies
     #
-    if [[ `lsb_release -r` =~ "12.04" ]]; then
-        sudo add-apt-repository --yes ppa:ubuntu-toolchain-r/test
+    if [[ ${MASON_PLATFORM} != "android" ]]; then
+        if [[ `lsb_release -r` =~ "12.04" ]]; then
+            sudo add-apt-repository --yes ppa:ubuntu-toolchain-r/test
+        fi
+        sudo add-apt-repository --yes ppa:boost-latest/ppa
     fi
-    sudo add-apt-repository --yes ppa:boost-latest/ppa
 
     mapbox_time "apt_update" \
     sudo apt-get update -y
 
-    mapbox_time "install_gcc" \
-    sudo apt-get -y install gcc-4.8 g++-4.8
-
     mapbox_time "install_build_tools" \
-    sudo apt-get -y install git build-essential zlib1g-dev automake gdb \
-                            libtool xutils-dev make cmake pkg-config python-pip \
-                            libboost1.55-dev libcurl4-openssl-dev \
-                            libpng-dev libsqlite3-dev
+    sudo apt-get -y install git build-essential automake gdb \
+                            libtool xutils-dev make cmake pkg-config python-pip
 
     if [[ ${MASON_PLATFORM} == "android" ]]; then
         mapbox_time "setup_android" \
         ./scripts/setup-android-build.sh
     else
+        mapbox_time "install_gcc" \
+        sudo apt-get -y install gcc-4.8 g++-4.8
+
+        mapbox_time "install_libraries" \
+        sudo apt-get -y install zlib1g-dev libboost1.55-dev \
+                                libcurl4-openssl-dev libpng-dev libsqlite3-dev
+
         mapbox_time "install_opengl" \
         sudo apt-get -y install mesa-utils libxi-dev x11proto-randr-dev \
                                 x11proto-xext-dev libxrandr-dev \
