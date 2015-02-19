@@ -1461,6 +1461,19 @@ mbgl::DefaultFileSource *mbglFileSource = nullptr;
             }
             break;
         }
+        case mbgl::MapChangeRegionIsChanging:
+        {
+            [self.regionChangeDelegateQueue addOperationWithBlock:^
+             {
+                 dispatch_async(dispatch_get_main_queue(), ^
+                 {
+                     if ([self.delegate respondsToSelector:@selector(mapViewRegionIsChanging:)])
+                     {
+                         [self.delegate mapViewRegionIsChanging:self];
+                     }
+                 });
+             }];
+        }
         case mbgl::MapChangeRegionDidChange:
         case mbgl::MapChangeRegionDidChangeAnimated:
         {

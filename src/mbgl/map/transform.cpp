@@ -73,6 +73,7 @@ void Transform::_moveBy(const double dx, const double dy, const std::chrono::ste
         transitions.emplace_front(
             std::make_shared<util::ease_transition<double>>(current.y, final.y, current.y, start, duration));
     }
+    view.notifyMapChange(MapChangeRegionIsChanging);
 
     view.notifyMapChange(duration != std::chrono::steady_clock::duration::zero() ?
                            MapChangeRegionDidChangeAnimated :
