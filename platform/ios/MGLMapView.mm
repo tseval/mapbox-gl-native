@@ -1463,16 +1463,10 @@ mbgl::DefaultFileSource *mbglFileSource = nullptr;
         }
         case mbgl::MapChangeRegionIsChanging:
         {
-            [self.regionChangeDelegateQueue addOperationWithBlock:^
+             if ([self.delegate respondsToSelector:@selector(mapViewRegionIsChanging:)])
              {
-                 dispatch_async(dispatch_get_main_queue(), ^
-                 {
-                     if ([self.delegate respondsToSelector:@selector(mapViewRegionIsChanging:)])
-                     {
-                         [self.delegate mapViewRegionIsChanging:self];
-                     }
-                 });
-             }];
+                 [self.delegate mapViewRegionIsChanging:self];
+             }
         }
         case mbgl::MapChangeRegionDidChange:
         case mbgl::MapChangeRegionDidChangeAnimated:
