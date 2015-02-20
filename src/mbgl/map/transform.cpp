@@ -27,6 +27,7 @@ bool Transform::resize(const uint16_t w, const uint16_t h, const float ratio,
 
         view.notifyMapChange(MapChangeRegionWillChange);
 
+        view.notifyMapChange(MapChangeRegionIsChanging);
         current.width = final.width = w;
         current.height = final.height = h;
         current.pixelRatio = final.pixelRatio = ratio;
@@ -62,6 +63,7 @@ void Transform::_moveBy(const double dx, const double dy, const std::chrono::ste
 
     constrain(final.scale, final.y);
 
+    view.notifyMapChange(MapChangeRegionIsChanging);
     if (duration == std::chrono::steady_clock::duration::zero()) {
         current.x = final.x;
         current.y = final.y;
@@ -264,6 +266,7 @@ void Transform::_setScaleXY(const double new_scale, const double xn, const doubl
 
     constrain(final.scale, final.y);
 
+    view.notifyMapChange(MapChangeRegionIsChanging);
     if (duration == std::chrono::steady_clock::duration::zero()) {
         current.scale = final.scale;
         current.x = final.x;
@@ -373,6 +376,7 @@ void Transform::_setAngle(double new_angle, const std::chrono::steady_clock::dur
 
     final.angle = new_angle;
 
+    view.notifyMapChange(MapChangeRegionIsChanging);
     if (duration == std::chrono::steady_clock::duration::zero()) {
         current.angle = final.angle;
     } else {

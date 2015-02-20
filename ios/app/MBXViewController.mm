@@ -66,7 +66,7 @@ mbgl::Settings_NSUserDefaults *settings = nullptr;
     self.mapView = [[MGLMapView alloc] initWithFrame:self.view.bounds accessToken:accessToken];
     self.mapView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     [self.view addSubview:self.mapView];
-
+    
     self.mapView.viewControllerForLayoutGuides = self;
 
     self.view.tintColor = kTintColor;
