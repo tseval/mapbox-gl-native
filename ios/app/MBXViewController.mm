@@ -1,4 +1,5 @@
 #import "MBXViewController.h"
+#import "SMCalloutView.h"
 
 #import <mbgl/ios/MGLMapView.h>
 
@@ -19,6 +20,8 @@ static NSDictionary *const kStyles = @{
 @interface MBXViewController () <UIActionSheetDelegate, CLLocationManagerDelegate>
 
 @property (nonatomic) MGLMapView *mapView;
+@property (nonatomic) SMCalloutView *calloutView;
+@property (nonatomic) UITapGestureRecognizer *tapRecognizer;
 @property (nonatomic) CLLocationManager *locationManager;
 @property (nonatomic) NSMutableArray *features;
 @property (nonatomic) UIImage *pin;
@@ -67,11 +70,18 @@ mbgl::Settings_NSUserDefaults *settings = nullptr;
     self.mapView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     [self.view addSubview:self.mapView];
     
+    [self.mapView setDelegate:self];
+    
     self.mapView.viewControllerForLayoutGuides = self;
 
     self.view.tintColor = kTintColor;
     self.navigationController.navigationBar.tintColor = kTintColor;
     self.mapView.tintColor = kTintColor;
+    
+    self.calloutView = [SMCalloutView platformCalloutView];
+    [self.mapView addSubview:self.calloutView];
+    self.tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showPopupForTapRecognizer:)];
+    self.tapRecognizer.numberOfTapsRequired = 1;
 
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"settings.png"]
                                                                              style:UIBarButtonItemStylePlain
@@ -116,7 +126,10 @@ mbgl::Settings_NSUserDefaults *settings = nullptr;
             CGPoint p = [self.mapView convertCoordinate:c toPointToView:self.mapView];
             UIImageView *pinView = [[UIImageView alloc] initWithImage:self.pin];
             pinView.center = p;
+            pinView.userInteractionEnabled = YES;
             [self.view addSubview:pinView];
+            
+            [pinView addGestureRecognizer:self.tapRecognizer];
 
             feature[@"view"] = pinView;
 
@@ -129,6 +142,24 @@ mbgl::Settings_NSUserDefaults *settings = nullptr;
 
     CADisplayLink *link = [CADisplayLink displayLinkWithTarget:self selector:@selector(refresh:)];
     [link addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
+}
+
+#pragma mark MGLMapViewDelegate
+
+- (void)mapView:(MGLMapView *)mapView regionWillChangeAnimated:(BOOL)animated
+{
+    NSLog(@"regionWillChangeAnimated with mapView = %@, and animated = %d", mapView, animated);
+//    [self.calloutView dismissCalloutAnimated:YES];
+}
+
+- (void)mapViewRegionIsChanging:(MGLMapView *)mapView
+{
+    NSLog(@"mapViewRegionIsChanging with mapView = %@", mapView);
+}
+
+- (void)mapView:(MGLMapView *)mapView regionDidChangeAnimated:(BOOL)animated
+{
+    NSLog(@"regionDidChangeAnimated with mapView = %@, and animated = %d", mapView, animated);
 }
 
 #pragma clang diagnostic push
@@ -184,6 +215,12 @@ mbgl::Settings_NSUserDefaults *settings = nullptr;
 }
 
 #pragma mark - Actions
+
+- (void)showPopupForTapRecognizer:(UITapGestureRecognizer *)tapRecognizer {
+    self.calloutView.title = @"Hey";
+    self.calloutView.subtitle = @"There!";
+    [self.calloutView presentCalloutFromRect:tapRecognizer.view.bounds inView:tapRecognizer.view constrainedToView:self.mapView animated:YES];
+}
 
 - (void)showSettings
 {
