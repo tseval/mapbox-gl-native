@@ -139,33 +139,20 @@ mbgl::Settings_NSUserDefaults *settings = nullptr;
 
     self.lastCenter = self.mapView.centerCoordinate;
     self.lastZoom = self.mapView.zoomLevel;
-
-    CADisplayLink *link = [CADisplayLink displayLinkWithTarget:self selector:@selector(refresh:)];
-    [link addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
 }
 
 #pragma mark MGLMapViewDelegate
 
-- (void)mapView:(MGLMapView *)mapView regionWillChangeAnimated:(BOOL)animated
-{
-    NSLog(@"regionWillChangeAnimated with mapView = %@, and animated = %d", mapView, animated);
-//    [self.calloutView dismissCalloutAnimated:YES];
-}
-
 - (void)mapViewRegionIsChanging:(MGLMapView *)mapView
 {
-    NSLog(@"mapViewRegionIsChanging with mapView = %@", mapView);
-}
-
-- (void)mapView:(MGLMapView *)mapView regionDidChangeAnimated:(BOOL)animated
-{
-    NSLog(@"regionDidChangeAnimated with mapView = %@, and animated = %d", mapView, animated);
+    (void)mapView;
+    [self refresh];
 }
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wunused-parameter"
 
-- (void)refresh:(CADisplayLink *)link
+- (void)refresh
 {
     if (self.mapView.centerCoordinate.latitude != self.lastCenter.latitude   ||
         self.mapView.centerCoordinate.longitude != self.lastCenter.longitude ||
