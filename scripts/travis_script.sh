@@ -44,6 +44,9 @@ elif [[ ${TRAVIS_OS_NAME} == "osx" ]]; then
     #
     # build iOS
     #
+    mapbox_time "checkout_calloutview" \
+    git submodule update --init calloutview
+
     mapbox_time "build_ios_project_device_release" \
     make ios -j$JOBS
     mapbox_time "build_ios_project_simulator_debug" \
