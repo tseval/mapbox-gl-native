@@ -29,6 +29,10 @@
         './MBXViewController.h',
         './MBXViewController.mm',
         '../../platform/darwin/settings_nsuserdefaults.mm',
+        '../../calloutview/SMCalloutView.h',
+        '../../calloutview/SMCalloutView.m',
+        '../../calloutview/SMClassicCalloutView.h',
+        '../../calloutview/SMClassicCalloutView.m',
       ],
 
       'link_settings': {

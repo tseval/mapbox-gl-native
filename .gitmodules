@@ -6,6 +6,10 @@
 	path = .mason
 	url = https://github.com/mapbox/mason.git
 
+[submodule "calloutview"]
+	path = calloutview
+	url = https://github.com/nfarina/calloutview.git
+
 [submodule "styles"]
 	path = styles
 	url = https://github.com/mapbox/mapbox-gl-styles.git
