@@ -39,6 +39,20 @@ std::string normalizeGlyphsURL(const std::string& url, const std::string& access
     return normalizeURL(url, accessToken);
 }
 
+std::string normalizeTileURL(const std::string& url) {
+    if (url.compare(url.length() - 4, 4, ".png") == 0)
+        return url.substr(0, url.length() - 4) + "{ratio}.png";
+    
+    std::string::size_type extensionIndex = url.rfind(".png?");
+    if (extensionIndex != std::string::npos) {
+        std::string normalizedURL(url);
+        normalizedURL.replace(extensionIndex, 5, "{ratio}.png?");
+        return normalizedURL;
+    }
+    
+    return url;
+}
+
 }
 }
 }
