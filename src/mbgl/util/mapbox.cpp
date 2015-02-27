@@ -45,7 +45,7 @@ std::string normalizeTileURL(const std::string& url, const std::string& sourceUR
         return url;
     
     static std::regex extension_re("\\.((?:png|jpg)\\d*)(?=$|\\?)");
-    return std::regex_replace(url, extension_re, "{ratio}.$1");
+    return std::regex_replace(url, extension_re, std::string("{ratio}.$1"));
 }
 
 }
