@@ -556,6 +556,8 @@ mbgl::DefaultFileSource *mbglFileSource = nullptr;
         mbglMap->moveBy(delta.x, delta.y);
 
         self.centerPoint = CGPointMake(self.centerPoint.x + delta.x, self.centerPoint.y + delta.y);
+        
+        [self notifyMapChange:@(mbgl::MapChangeRegionDidChangeAnimated)];
     }
     else if (pan.state == UIGestureRecognizerStateEnded || pan.state == UIGestureRecognizerStateCancelled)
     {
@@ -1591,6 +1593,7 @@ mbgl::DefaultFileSource *mbglFileSource = nullptr;
     {
         [self.glView display];
         mbglMap->swapped();
+        [self notifyMapChange:@(mbgl::MapChangeRegionIsChanging)];
     }
 }
 
@@ -1619,12 +1622,7 @@ class MBGLView : public mbgl::View
         }
         else
         {
-            dispatch_async(dispatch_get_main_queue(), ^
-            {
-                [nativeView performSelector:@selector(notifyMapChange:)
-                                 withObject:@(change)
-                                 afterDelay:0];
-            });
+            [nativeView notifyMapChange:@(change)];
         }
     }
 
