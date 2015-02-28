@@ -482,6 +482,9 @@ double Map::getMaxZoom() const {
     return transform.getMaxZoom();
 }
 
+LatLng* Map::getLocations() const {
+    return transform.currentState().getLocations();
+}
 
 #pragma mark - Rotation
 

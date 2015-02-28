@@ -12,10 +12,10 @@
 #include <limits>
 
 namespace mbgl {
-
+    
 class TransformState {
     friend class Transform;
-
+    
 public:
     // Matrix
     void matrixFor(mat4& matrix, const Tile::ID& id) const;
@@ -55,7 +55,10 @@ public:
 
     // Changing
     bool isChanging() const;
-
+    
+    // Sampe Location Data
+    LatLng* getLocations() const;
+    
 private:
     double pixel_x() const;
     double pixel_y() const;
@@ -82,6 +85,10 @@ private:
     double x = 0, y = 0;
     double angle = 0;
     double scale = 1;
+    
+    // Sample Location Data
+    LatLng locations [4] = {LatLng(37.76027, -122.42709), LatLng(37.76145, -122.42397), LatLng(37.76181, -122.42181), LatLng(37.76168, -122.41960)};
+    
 };
 
 }

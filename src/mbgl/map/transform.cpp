@@ -57,6 +57,23 @@ void Transform::_moveBy(const double dx, const double dy, const std::chrono::ste
                            MapChangeRegionWillChangeAnimated :
                            MapChangeRegionWillChange);
 
+
+/**
+    TODO - Apply some transformations here for access by the MapView later.
+ 
+    // Rotate
+    current.locations
+    
+    mbgl::vec2<double> pixel = mbglMap->pixelForLatLng(mbgl::LatLng(coordinate.latitude, coordinate.longitude));
+    
+    // flip y coordinate for iOS view origin in top left
+    //
+    pixel.y = self.bounds.size.height - pixel.y;
+    
+    return [self convertPoint:CGPointMake(pixel.x, pixel.y) toView:view];
+**/
+    
+    
     final.x = current.x + std::cos(current.angle) * dx + std::sin(current.angle) * dy;
     final.y = current.y + std::cos(current.angle) * dy + std::sin(-current.angle) * dx;
 
