@@ -3,8 +3,8 @@
 set -e
 set -o pipefail
 
-mapbox_time "glxinfo" \
-glxinfo
+# mapbox_time "glxinfo" \
+# glxinfo
 
 mapbox_time "compile_program" \
 make linux -j$JOBS BUILDTYPE=${BUILDTYPE}
