@@ -6,6 +6,9 @@ set -o pipefail
 # mapbox_time "glxinfo" \
 # glxinfo
 
+mapbox_time "checkout_styles" \
+git submodule update --init styles
+
 mapbox_time "compile_program" \
 make linux -j$JOBS BUILDTYPE=${BUILDTYPE}
 
