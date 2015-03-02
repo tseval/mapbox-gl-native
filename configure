@@ -15,7 +15,7 @@ function finish {
 trap finish EXIT
 
 # Install mason
-. ./scripts/local_mason.sh
+. ./scripts/setup_mason.sh
 
 case ${MASON_PLATFORM} in
     'ios')
