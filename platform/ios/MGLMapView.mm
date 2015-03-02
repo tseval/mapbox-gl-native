@@ -924,7 +924,7 @@ mbgl::DefaultFileSource *mbglFileSource = nullptr;
     
     std::array<mbgl::LatLng, 4> locs = mbglMap->getSampleLocations();
     
-    for (unsigned long lc = 0; lc < sizeof(locs); lc++) {
+    for (unsigned long lc = 0; lc < locs.size(); lc++) {
         NSString *latLon = [NSString stringWithFormat:@"%f,%f", locs[lc].latitude, locs[lc].longitude];
         [results addObject:latLon];
     }
