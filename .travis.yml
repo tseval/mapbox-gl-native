@@ -2,6 +2,10 @@ language: cpp
 
 sudo: false
 
+cache:
+  directories:
+  - toolchain
+
 matrix:
   exclude:
     - os: linux
@@ -29,6 +33,7 @@ before_install:
 install:
 - source ./scripts/install_node.sh
 - source ./scripts/install_awscli.sh
+- if [[ ${MASON_PLATFORM} == "linux" ]]; then ./scripts/setup_cxx11.sh; source ./toolchain/env.sh ; fi
 - ./scripts/install_${MASON_PLATFORM}.sh
 
 script:

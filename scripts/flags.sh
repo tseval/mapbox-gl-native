@@ -11,6 +11,9 @@ if [[ ${TRAVIS_OS_NAME} == "linux" ]]; then
     if [[ ${CXX} == "g++" ]]; then
         export CXX="g++-4.8"
         export CC="gcc-4.8"
+    elif [[ ${CXX}] == "clang++" ]]; then
+        export CXX="clang++-3.5"
+        export CC="clang-3.5"
     fi
 
     # If building in debug then turn on sanitizers.
