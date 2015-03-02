@@ -918,6 +918,20 @@ mbgl::DefaultFileSource *mbglFileSource = nullptr;
     return mbglMap->getMetersPerPixelAtLatitude(latitude, self.zoomLevel);
 }
 
+# pragma mark - Sample Locations
+- (NSArray *) getSampleLoctions {
+    NSMutableArray* results = [[NSMutableArray alloc] init];
+    
+    std::array<mbgl::LatLng, 4> locs = mbglMap->getSampleLocations();
+    
+    for (unsigned long lc = 0; lc < sizeof(locs); lc++) {
+        NSString *latLon = [NSString stringWithFormat:@"%f,%f", locs[lc].latitude, locs[lc].longitude];
+        [results addObject:latLon];
+    }
+    
+    return results;
+}
+
 #pragma mark - Styling -
 
 - (NSDictionary *)getRawStyle
