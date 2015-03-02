@@ -304,11 +304,10 @@ void Transform::_setScaleXY(const double new_scale, const double xn, const doubl
 void Transform::updateSampleLocationScreenCoordinates() {
 
     std::array<LatLng, 4> locs = current.getSampleLocations();
-    std::array<mbgl::vec2<double>, 4> locCoords = current.getSampleLocationsScreenCoordinates();
 
     for (unsigned long lc = 0; lc < locs.size(); lc++) {
         mbgl::vec2<double> pixel = current.pixelForLatLng(locs[lc]);
-        locCoords[lc] = pixel;
+        current.sampleLocationsScreenCooridnates[lc] = pixel;
     }
 }
 
