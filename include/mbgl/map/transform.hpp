@@ -47,6 +47,7 @@ public:
     
     // Sample Locations
     std::array<LatLng, 4> getSampleLocations() const;
+    std::array<mbgl::vec2<double>, 4> getSampleLocationsScreenCoordinates() const;
 
     // Angle
     void rotateBy(double sx, double sy, double ex, double ey, std::chrono::steady_clock::duration duration = std::chrono::steady_clock::duration::zero());
@@ -76,6 +77,7 @@ private:
     void _clearRotating();
     void _clearScaling();
 
+    void updateSampleLocationScreenCoordinates();
     void constrain(double& scale, double& y) const;
 
 private:

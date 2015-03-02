@@ -932,6 +932,24 @@ mbgl::DefaultFileSource *mbglFileSource = nullptr;
     return results;
 }
 
+- (NSArray *) getSampleLoctionsScreenCoordinatesConvertedFromView:(UIView *)view {
+
+    NSMutableArray* results = [[NSMutableArray alloc] init];
+
+    std::array<mbgl::vec2<double>, 4> locs = mbglMap->getSampleLocationsScreenCoordinates();
+    for (unsigned long lc = 0; lc < locs.size(); lc++) {
+        mbgl::vec2<double> pixel = locs[lc];
+        // flip y coordinate for iOS view origin in top left
+        //
+        pixel.y = self.bounds.size.height - pixel.y;
+        
+        [results addObject:[NSValue valueWithCGPoint:[self convertPoint:CGPointMake(pixel.x, pixel.y) toView:view]]];
+    }
+    
+    return results;
+}
+
+
 #pragma mark - Styling -
 
 - (NSDictionary *)getRawStyle

@@ -487,6 +487,10 @@ std::array<LatLng, 4> Map::getSampleLocations() const {
     return transform.getSampleLocations();
 }
 
+std::array<mbgl::vec2<double>, 4> Map::getSampleLocationsScreenCoordinates() const {
+    return transform.getSampleLocationsScreenCoordinates();
+}
+
 #pragma mark - Rotation
 
 void Map::rotateBy(double sx, double sy, double ex, double ey, std::chrono::steady_clock::duration duration) {

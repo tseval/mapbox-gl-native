@@ -151,10 +151,11 @@ mbgl::Settings_NSUserDefaults *settings = nullptr;
 //        self.lastCenter = self.mapView.centerCoordinate;
 //        self.lastZoom = self.mapView.zoomLevel;
 //    }
+    NSArray *locsCoords = [self.mapView getSampleLoctionsScreenCoordinatesConvertedFromView:self.mapView];
     NSArray *locs = [self.mapView getSampleLoctions];
     NSMutableString *str = [[NSMutableString alloc] init];
     for (unsigned long lc = 0; lc < [locs count]; lc++) {
-        [str appendString:[locs objectAtIndex:lc]];
+        [str appendString:[NSString stringWithFormat:@"(latlng = %@, xy = %@)", [locs objectAtIndex:lc], [locsCoords objectAtIndex:lc]]];
     }
     NSLog(@"refresh for number of locs = %lu: %@", [locs count], str);
 }

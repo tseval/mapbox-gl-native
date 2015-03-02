@@ -58,6 +58,7 @@ public:
     
     // Sample Location Data
     std::array<LatLng, 4> getSampleLocations() const;
+    std::array<mbgl::vec2<double>, 4> getSampleLocationsScreenCoordinates() const;
     
 private:
     double pixel_x() const;
@@ -88,6 +89,7 @@ private:
     
     // Sample Location Data
     std::array<LatLng, 4> sampleLocations = {{LatLng(37.76027, -122.42709), LatLng(37.76145, -122.42397), LatLng(37.76181, -122.42181), LatLng(37.76168, -122.41960)}};
+    std::array<mbgl::vec2<double>, 4> sampleLocationsScreenCooridnates = std::array<mbgl::vec2<double>, 4>();
     
 };
 

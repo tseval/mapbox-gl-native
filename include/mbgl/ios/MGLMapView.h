@@ -133,6 +133,7 @@
 
 # pragma mark - Sample Locations
 - (NSArray *) getSampleLoctions;
+- (NSArray *) getSampleLoctionsScreenCoordinatesConvertedFromView:(UIView *)view;
 
 #pragma mark - Converting Map Coordinates
 

@@ -58,21 +58,7 @@ void Transform::_moveBy(const double dx, const double dy, const std::chrono::ste
                            MapChangeRegionWillChange);
 
 
-/**
-    TODO - Apply some transformations here for access by the MapView later.
- 
-    // Rotate
-    current.locations
-    
-    mbgl::vec2<double> pixel = mbglMap->pixelForLatLng(mbgl::LatLng(coordinate.latitude, coordinate.longitude));
-    
-    // flip y coordinate for iOS view origin in top left
-    //
-    pixel.y = self.bounds.size.height - pixel.y;
-    
-    return [self convertPoint:CGPointMake(pixel.x, pixel.y) toView:view];
-**/
-    
+    updateSampleLocationScreenCoordinates();
     
     final.x = current.x + std::cos(current.angle) * dx + std::sin(current.angle) * dy;
     final.y = current.y + std::cos(current.angle) * dy + std::sin(-current.angle) * dx;
@@ -228,6 +214,10 @@ std::array<LatLng, 4> Transform::getSampleLocations() const {
     return current.getSampleLocations();
 }
 
+std::array<mbgl::vec2<double>, 4> Transform::getSampleLocationsScreenCoordinates() const {
+    return current.getSampleLocationsScreenCoordinates();
+}
+
 void Transform::_clearScaling() {
     // This is only called internally, so we don't need a lock here.
 
@@ -308,6 +298,18 @@ void Transform::_setScaleXY(const double new_scale, const double xn, const doubl
                            MapChangeRegionDidChangeAnimated :
                            MapChangeRegionDidChange,
                            duration);
+}
+
+#pragma mark - Sample Location Screen Coordinates
+void Transform::updateSampleLocationScreenCoordinates() {
+
+    std::array<LatLng, 4> locs = current.getSampleLocations();
+    std::array<mbgl::vec2<double>, 4> locCoords = current.getSampleLocationsScreenCoordinates();
+
+    for (unsigned long lc = 0; lc < locs.size(); lc++) {
+        mbgl::vec2<double> pixel = current.pixelForLatLng(locs[lc]);
+        locCoords[lc] = pixel;
+    }
 }
 
 #pragma mark - Constraints
