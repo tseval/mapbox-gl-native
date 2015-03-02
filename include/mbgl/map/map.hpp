@@ -116,6 +116,9 @@ public:
     double getMinZoom() const;
     double getMaxZoom() const;
     
+    // Sample Locations
+    std::array<LatLng, 4> getSampleLocations() const;
+    
     // Rotation
     void rotateBy(double sx, double sy, double ex, double ey, std::chrono::steady_clock::duration duration = std::chrono::steady_clock::duration::zero());
     void setBearing(double degrees, std::chrono::steady_clock::duration duration = std::chrono::steady_clock::duration::zero());

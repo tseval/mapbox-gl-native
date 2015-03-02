@@ -56,8 +56,8 @@ public:
     // Changing
     bool isChanging() const;
     
-    // Sampe Location Data
-    LatLng* getLocations();
+    // Sample Location Data
+    std::array<LatLng, 4> getSampleLocations() const;
     
 private:
     double pixel_x() const;
@@ -87,7 +87,7 @@ private:
     double scale = 1;
     
     // Sample Location Data
-    LatLng locations [4] = {LatLng(37.76027, -122.42709), LatLng(37.76145, -122.42397), LatLng(37.76181, -122.42181), LatLng(37.76168, -122.41960)};
+    std::array<LatLng, 4> sampleLocations = {{LatLng(37.76027, -122.42709), LatLng(37.76145, -122.42397), LatLng(37.76181, -122.42181), LatLng(37.76168, -122.41960)}};
     
 };
 

@@ -224,6 +224,10 @@ double Transform::getMaxZoom() const {
     return std::log2(max_scale);
 }
 
+std::array<LatLng, 4> Transform::getSampleLocations() const {
+    return current.getSampleLocations();
+}
+
 void Transform::_clearScaling() {
     // This is only called internally, so we don't need a lock here.
 

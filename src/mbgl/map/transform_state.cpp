@@ -254,8 +254,8 @@ bool TransformState::isChanging() const {
 
 #pragma mark - Sample Locations
 
-LatLng* TransformState::getLocations() {
-    return locations;
+std::array<LatLng, 4> TransformState::getSampleLocations() const {
+    return sampleLocations;
 }
 
 #pragma mark - (private helper functions)

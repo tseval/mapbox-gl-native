@@ -482,6 +482,11 @@ double Map::getMaxZoom() const {
     return transform.getMaxZoom();
 }
 
+#pragma mark - Sample Locations
+std::array<LatLng, 4> Map::getSampleLocations() const {
+    return transform.getSampleLocations();
+}
+
 #pragma mark - Rotation
 
 void Map::rotateBy(double sx, double sy, double ex, double ey, std::chrono::steady_clock::duration duration) {
