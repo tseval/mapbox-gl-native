@@ -252,6 +252,11 @@ bool TransformState::isChanging() const {
     return rotating || scaling || panning;
 }
 
+#pragma mark - Sample Locations
+
+LatLng* TransformState::getLocations() {
+    return locations;
+}
 
 #pragma mark - (private helper functions)
 

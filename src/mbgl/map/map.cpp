@@ -482,10 +482,6 @@ double Map::getMaxZoom() const {
     return transform.getMaxZoom();
 }
 
-LatLng* Map::getLocations() const {
-    return transform.currentState().getLocations();
-}
-
 #pragma mark - Rotation
 
 void Map::rotateBy(double sx, double sy, double ex, double ey, std::chrono::steady_clock::duration duration) {

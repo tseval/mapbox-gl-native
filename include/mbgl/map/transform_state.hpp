@@ -57,7 +57,7 @@ public:
     bool isChanging() const;
     
     // Sampe Location Data
-    LatLng* getLocations() const;
+    LatLng* getLocations();
     
 private:
     double pixel_x() const;
