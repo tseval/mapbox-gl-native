@@ -1,5 +1,11 @@
 #!/usr/bin/env bash
 
+case `uname -s` in
+    'Darwin') JOBS=`sysctl -n hw.ncpu` ;;
+    'Linux')  JOBS=`nproc` ;;
+    *)        JOBS='1' ;;
+esac
+
 function mapbox_time_start {
     local name=$1
     mapbox_timer_name=$name
@@ -53,6 +59,7 @@ function travis_nanoseconds {
 }
 fi
 
+export JOBS
 export ANSI_CLEAR
 export -f travis_fold
 export -f travis_nanoseconds
