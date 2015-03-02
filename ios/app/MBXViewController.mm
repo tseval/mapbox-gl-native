@@ -136,21 +136,27 @@ mbgl::Settings_NSUserDefaults *settings = nullptr;
 
 - (void)refresh:(CADisplayLink *)link
 {
-    if (self.mapView.centerCoordinate.latitude != self.lastCenter.latitude   ||
-        self.mapView.centerCoordinate.longitude != self.lastCenter.longitude ||
-        self.mapView.zoomLevel != self.lastZoom) {
-        for (NSDictionary *feature in self.features) {
-            CLLocationCoordinate2D c = CLLocationCoordinate2DMake([feature[@"geometry"][@"coordinates"][1] doubleValue],
-                                                                  [feature[@"geometry"][@"coordinates"][0] doubleValue]);
-            CGPoint p = [self.mapView convertCoordinate:c toPointToView:self.mapView];
-            if (CGRectContainsPoint(self.mapView.bounds, p)) {
-                ((UIView *)feature[@"view"]).center = p;
-            }
-        }
-
-        self.lastCenter = self.mapView.centerCoordinate;
-        self.lastZoom = self.mapView.zoomLevel;
+//    if (self.mapView.centerCoordinate.latitude != self.lastCenter.latitude   ||
+//        self.mapView.centerCoordinate.longitude != self.lastCenter.longitude ||
+//        self.mapView.zoomLevel != self.lastZoom) {
+//        for (NSDictionary *feature in self.features) {
+//            CLLocationCoordinate2D c = CLLocationCoordinate2DMake([feature[@"geometry"][@"coordinates"][1] doubleValue],
+//                                                                  [feature[@"geometry"][@"coordinates"][0] doubleValue]);
+//            CGPoint p = [self.mapView convertCoordinate:c toPointToView:self.mapView];
+//            if (CGRectContainsPoint(self.mapView.bounds, p)) {
+//                ((UIView *)feature[@"view"]).center = p;
+//            }
+//        }
+//
+//        self.lastCenter = self.mapView.centerCoordinate;
+//        self.lastZoom = self.mapView.zoomLevel;
+//    }
+    NSArray *locs = [self.mapView getSampleLoctions];
+    NSMutableString *str = [[NSMutableString alloc] init];
+    for (unsigned long lc = 0; lc < [locs count]; lc++) {
+        [str appendString:[locs objectAtIndex:lc]];
     }
+    NSLog(@"refresh for number of locs = %lu: %@", [locs count], str);
 }
 
 - (void)saveState:(NSNotification *)notification
