@@ -3,7 +3,7 @@
 set -e
 set -o pipefail
 
-./scripts/local_mason.sh
+./scripts/setup_mason.sh
 
 export MASON_PLATFORM=android
 
