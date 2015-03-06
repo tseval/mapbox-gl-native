@@ -4,6 +4,9 @@
 #include <string>
 #include <stdexcept>
 
+#if QT_OPENGL
+#include <QOpenGLContext>
+#else
 #if __APPLE__
     #include "TargetConditionals.h"
     #if TARGET_OS_IPHONE
@@ -26,6 +29,7 @@
     #define GL_GLEXT_PROTOTYPES
     #include <GL/gl.h>
     #include <GL/glext.h>
+#endif
 #endif
 
 namespace mbgl {
